@@ -1,2 +1,0 @@
-# quizApp
-tutorial quizapp
