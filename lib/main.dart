@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import './questions.dart';
-import './answeres.dart';
+import 'question.dart';
+import 'answere.dart';
 
 void main() => runApp(MyApp());
 
@@ -12,76 +12,51 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-  var indexOfQuestion = 0;
-  var indexOfAnswere = -1;
-  var questions = [
-    "what is your fav color",
-    "what is your fav football team",
-    "what is your fav food"
-  ];
-  var anslist = [
-    'red',
-    'green',
-    'blue',
-    'argentina',
-    'brazil',
-    'france',
-    'bangla',
-    'indian',
-    'western',
-  ];
-  void _question() {
-    print('button pressed.');
+  var _questionIndex = 0;
+  void _answerQuestion() {
     setState(() {
-      indexOfQuestion += 1;
+      _questionIndex += 1;
     });
-
-    if (indexOfQuestion >= 3) indexOfQuestion = 0;
-  }
-
-  String _answere() {
-    print("answere button index++");
-    setState(() {
-      indexOfAnswere += 1;
-    });
-    if (indexOfAnswere >= 9) indexOfAnswere = 0;
-    return anslist[indexOfAnswere];
+    if (_questionIndex >= 3) {
+      _questionIndex = 0;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    var questions = [
+      {
+        'questionText': 'what is your fav color',
+        'answers': ['red', 'green', 'blue', 'indigo']
+      },
+      {
+        'questionText': 'what is your fav football team',
+        'answers': ['argentina', 'brazil', 'france', 'spain']
+      },
+      {
+        'questionText': 'what is your fav food',
+        'answers': ['bangla', 'indian land', 'western', 'voxod']
+      },
+    ];
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text("Project rescue"),
-          backgroundColor: Colors.indigo[900],
+          title: Center(
+            child: Text(
+              "Quiz App",
+            ),
+          ),
+          backgroundColor: Color.fromRGBO(38, 42, 83, 0.9),
         ),
         body: Column(
           children: [
             Question(
-              questions[indexOfQuestion],
+              questions[_questionIndex]['questionText'].toString(),
             ),
-            Divider(),
-            RaisedButton(
-              onPressed: _question,
-              child: Answere(_answere()),
-              color: Colors.indigoAccent[400],
-              textColor: Colors.white,
-            ),
-            Divider(),
-            RaisedButton(
-              onPressed: _question,
-              child: Answere(_answere()),
-              color: Colors.indigoAccent[400],
-              textColor: Colors.white,
-            ),
-            Divider(),
-            RaisedButton(
-              onPressed: _question,
-              child: Answere(_answere()),
-              color: Colors.indigoAccent[400],
-              textColor: Colors.white,
-            ),
+            ...(questions[_questionIndex]['answers'] as List<String>)
+                .map((answer) {
+              return Answer(_answerQuestion, answer);
+            }).toList()
           ],
         ),
       ),
